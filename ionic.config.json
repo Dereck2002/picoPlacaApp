@@ -1,0 +1,7 @@
+{
+  "name": "picoPlacaApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
