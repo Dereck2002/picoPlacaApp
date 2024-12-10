@@ -5,36 +5,56 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <ion-item>
     <ion-label position="stacked">Placa del vehículo</ion-label>
     <ion-input [(ngModel)]="plate" placeholder="Ingrese la placa (ej. ABC1234)" type="text"></ion-input>
   </ion-item>
 
-  <ion-item>
+  <ion-item button (click)="toggleCalendar()">
     <ion-label position="stacked">Fecha</ion-label>
+    <ion-input [value]="date" readonly></ion-input>
+    <ion-icon [name]="showCalendar ? 'chevron-up' : 'chevron-down'"></ion-icon>
+  </ion-item>
+
+  <div *ngIf="showCalendar" class="calendar-container">
     <ion-datetime
       [(ngModel)]="date"
+      (ionChange)="updateDayOfWeek()"
       placeholder="Seleccione una fecha"
       display-format="DD/MM/YYYY"
       picker-format="YYYY-MM-DD"
+      presentation="date"
     ></ion-datetime>
-  </ion-item>
+  </div>
 
   <ion-item>
+    <ion-label>Dia:</ion-label>
+    <ion-text>{{ dayOfWeek }}</ion-text>
+  </ion-item>
+
+  <ion-item button (click)="toggleTimePicker()">
     <ion-label position="stacked">Hora</ion-label>
+    <ion-input [value]="time" readonly></ion-input>
+    <ion-icon [name]="showTimePicker ? 'chevron-up' : 'chevron-down'"></ion-icon>
+  </ion-item>
+
+  <div *ngIf="showTimePicker" class="time-container">
     <ion-datetime
       [(ngModel)]="time"
       placeholder="Seleccione una hora"
       display-format="HH:mm"
       picker-format="HH:mm"
+      presentation="time"
     ></ion-datetime>
-  </ion-item>
+  </div>
 
   <ion-button expand="full" (click)="checkIfCanDrive()">Verificar</ion-button>
   <ion-button expand="full" color="danger" (click)="clearFields()">Limpiar</ion-button>
 
   <ion-item *ngIf="result">
-    <ion-label>{{ result }}</ion-label>
+    <ion-label>
+      {{ result }}<br />
+      Consulta realizada a las: {{ currentTime }}
+    </ion-label>
   </ion-item>
 </ion-content>
