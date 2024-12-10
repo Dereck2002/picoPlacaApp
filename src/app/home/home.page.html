@@ -4,25 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
 
   <ion-item>
     <ion-label position="stacked">Placa del vehículo</ion-label>
-    <ion-input [(ngModel)]="plate" placeholder="Ingrese la placa" type="text"></ion-input>
+    <ion-input [(ngModel)]="plate" placeholder="Ingrese la placa (ej. ABC1234)" type="text"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="stacked">Fecha</ion-label>
-    <ion-input [(ngModel)]="date" readonly></ion-input>
+    <ion-datetime
+      [(ngModel)]="date"
+      placeholder="Seleccione una fecha"
+      display-format="DD/MM/YYYY"
+      picker-format="YYYY-MM-DD"
+    ></ion-datetime>
   </ion-item>
 
   <ion-item>
     <ion-label position="stacked">Hora</ion-label>
-    <ion-input [(ngModel)]="time" readonly></ion-input>
+    <ion-datetime
+      [(ngModel)]="time"
+      placeholder="Seleccione una hora"
+      display-format="HH:mm"
+      picker-format="HH:mm"
+    ></ion-datetime>
   </ion-item>
 
   <ion-button expand="full" (click)="checkIfCanDrive()">Verificar</ion-button>
-
   <ion-button expand="full" color="danger" (click)="clearFields()">Limpiar</ion-button>
 
   <ion-item *ngIf="result">
