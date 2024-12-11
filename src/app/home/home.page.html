@@ -20,7 +20,6 @@
     <ion-datetime
       [(ngModel)]="date"
       (ionChange)="updateDayOfWeek()"
-      placeholder="Seleccione una fecha"
       display-format="DD/MM/YYYY"
       picker-format="YYYY-MM-DD"
       presentation="date"
@@ -41,7 +40,7 @@
   <div *ngIf="showTimePicker" class="time-container">
     <ion-datetime
       [(ngModel)]="time"
-      placeholder="Seleccione una hora"
+      (ionChange)="updateDayOfWeek()"
       display-format="HH:mm"
       picker-format="HH:mm"
       presentation="time"
@@ -50,11 +49,18 @@
 
   <ion-button expand="full" (click)="checkIfCanDrive()">Verificar</ion-button>
   <ion-button expand="full" color="danger" (click)="clearFields()">Limpiar</ion-button>
+  <ion-button
+  expand="full"
+  color="primary"
+  (click)="presentAlertModal('Horarios restringidos: 06:00-09:30 y 16:00-21:00')"
+>
+  Ver Horarios
+</ion-button>
 
   <ion-item *ngIf="result">
     <ion-label>
       {{ result }}<br />
-      Consulta realizada a las: {{ currentTime }}
+      Consulta realizada a las: {{ time }}
     </ion-label>
   </ion-item>
 </ion-content>

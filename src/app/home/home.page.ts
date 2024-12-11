@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,13 +8,12 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
   plate: string = '';
-  date: string = new Date().toISOString();
-  time: string = new Date().toISOString();
+  date: string = new Date().toISOString().split('T')[0]; 
+  time: string = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   dayOfWeek: string = '';
   showCalendar: boolean = false;
   showTimePicker: boolean = false;
   result: string = '';
-  currentTime: string = new Date().toLocaleTimeString();
 
   daysOfWeek = [
     'Domingo',
@@ -38,8 +38,8 @@ export class HomePage {
     0: 'Viernes',
   };
 
-  constructor() {
-    this.updateDayOfWeek();
+  constructor(private alertController: AlertController) {
+    this.updateDayOfWeek(); 
   }
 
   toggleCalendar() {
@@ -51,13 +51,24 @@ export class HomePage {
   }
 
   updateDayOfWeek() {
-    const selectedDate = new Date(this.date);
-    this.dayOfWeek = this.daysOfWeek[selectedDate.getDay()];
+    const currentDate = new Date(); 
+    const currentDayOfWeek = currentDate.getDay(); 
+    this.dayOfWeek = this.daysOfWeek[currentDayOfWeek]; 
   }
+
+  async presentAlertModal(message: string = 'Horarios restringidos: 06:00-09:30 y 16:00-21:00') {
+    const alert = await this.alertController.create({
+      header: 'Restricción de circulación',
+      message: message,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+  
 
   checkIfCanDrive() {
     if (!this.plate || !this.date || !this.time) {
-      this.result = 'Por favor, complete todos los campos.';
+      this.presentAlertModal('Por favor, complete todos los campos.');
       return;
     }
 
@@ -65,19 +76,19 @@ export class HomePage {
     const restrictedDay = this.restrictedDays[parseInt(lastDigit, 10)];
 
     if (this.dayOfWeek === restrictedDay) {
-      this.result = 'No puede circular en esta fecha.';
+      this.presentAlertModal(
+        'No puede circular en los horarios restringidos: de 06:00 a 09:30 y de 16:00 a 21:00.'
+      );
     } else {
-      this.result = 'Puede circular en esta fecha.';
+      this.presentAlertModal('Puede circular en esta fecha.');
     }
-
-    this.currentTime = new Date().toLocaleTimeString();
   }
 
   clearFields() {
     this.plate = '';
-    this.date = new Date().toISOString();
-    this.time = new Date().toISOString();
+    this.date = new Date().toISOString().split('T')[0]; 
+    this.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     this.result = '';
-    this.updateDayOfWeek();
+    this.updateDayOfWeek(); 
   }
 }
