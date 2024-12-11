@@ -1,31 +1,50 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Pico y Placa</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="ion-padding">
   <ion-item>
     <ion-label position="stacked">Placa del vehículo</ion-label>
-    <ion-input [(ngModel)]="plate" placeholder="Ingrese la placa" type="text"></ion-input>
+    <ion-input [(ngModel)]="plate" placeholder="Ingrese la placa (ej. ABC1234)" type="text"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">Fecha</ion-label>
-    <ion-input [(ngModel)]="date" readonly></ion-input>
+    <ion-label>Dia:</ion-label>
+    <ion-text>{{ dayOfWeek }}</ion-text>
   </ion-item>
 
-  <ion-item>
+  <ion-item button (click)="toggleTimePicker()">
     <ion-label position="stacked">Hora</ion-label>
-    <ion-input [(ngModel)]="time" readonly></ion-input>
+    <ion-input [value]="time" readonly></ion-input>
+    <ion-icon [name]="showTimePicker ? 'chevron-up' : 'chevron-down'"></ion-icon>
   </ion-item>
+
+  <div *ngIf="showTimePicker" class="time-container">
+    <ion-datetime
+      [(ngModel)]="time"
+      (ionChange)="updateDayOfWeek()"
+      display-format="HH:mm"
+      picker-format="HH:mm"
+      presentation="time"
+    ></ion-datetime>
+  </div>
 
   <ion-button expand="full" (click)="checkIfCanDrive()">Verificar</ion-button>
-
   <ion-button expand="full" color="danger" (click)="clearFields()">Limpiar</ion-button>
+  <ion-button
+    expand="full"
+    color="primary"
+    (click)="openAlertModal()"
+  >
+    Ver Horarios
+  </ion-button>
 
   <ion-item *ngIf="result">
-    <ion-label>{{ result }}</ion-label>
+    <ion-label>
+      {{ result }}<br />
+      Consulta realizada a las: {{ time }}
+    </ion-label>
   </ion-item>
 </ion-content>
