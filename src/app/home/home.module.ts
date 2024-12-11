@@ -1,13 +1,11 @@
+// home.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
-
 import { HomePageRoutingModule } from './home-routing.module';
-
-// Importa el componente del modal
-import { AlertModalComponent } from './modal-component/alert-modal.component';
+import { PicoYPlacaService } from '../service/service.service';  // Asegúrate de importar el servicio aquí
 
 @NgModule({
   imports: [
@@ -18,7 +16,7 @@ import { AlertModalComponent } from './modal-component/alert-modal.component';
   ],
   declarations: [
     HomePage,
-    AlertModalComponent // Declara el modal aquí
-  ]
+  ],
+  providers: [PicoYPlacaService]  // Añade el servicio aquí
 })
 export class HomePageModule {}
