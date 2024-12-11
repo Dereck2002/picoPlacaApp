@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
   selector: 'app-alert-modal',
   template: `
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-title>Restricción de Circulación</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="closeModal()">Cerrar</ion-button>
