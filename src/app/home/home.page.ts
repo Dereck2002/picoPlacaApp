@@ -60,8 +60,16 @@ export class HomePage {
   }
 
   checkIfCanDrive() {
+
     if (!this.plate || !this.date || !this.time) {
       this.presentAlertModal('Por favor, complete todos los campos.');
+      return;
+    }
+  
+    // Validación de la placa para diferentes tipos de vehículos
+    const plateRegex = /^[A-Za-z]{2,3}-\d{3,4}$/; // Acepta formatos como ABC-123, AB-1234, ABC-1234
+    if (!plateRegex.test(this.plate)) {
+      this.presentAlertModal('La placa ingresada no es válida. Asegúrese de que siga un formato correcto como: ABC-1234 o AB-123.');
       return;
     }
   
