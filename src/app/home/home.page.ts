@@ -45,6 +45,7 @@ export class HomePage {
     const selectedDate = new Date(year, month - 1, day); 
     this.dayOfWeek = this.daysOfWeek[selectedDate.getDay()];
   }
+  
   updateTime() {
     const currentTime = new Date(`1970-01-01T${this.time}:00`);
     this.time = currentTime.toTimeString().slice(0, 5); 
@@ -60,7 +61,6 @@ export class HomePage {
   }
 
   checkIfCanDrive() {
-
     if (!this.plate || !this.date || !this.time) {
       this.presentAlertModal('Por favor, complete todos los campos.');
       return;
@@ -84,23 +84,32 @@ export class HomePage {
       return;
     }
   
-    if (this.picoYPlacaService.isRestricted(lastDigit, currentDayOfWeek)) {
-      const restrictedTimes = [
-        { start: '06:00', end: '09:30' },
-        { start: '16:00', end: '21:00' },
-      ];
-  
-      if (this.isTimeInRestrictedRange(this.time, restrictedTimes)) {
-        this.presentAlertModal(`No puede circular en los horarios restringidos: 
-          ${restrictedTimes[0].start} a ${restrictedTimes[0].end}
-          ${restrictedTimes[1].start} a ${restrictedTimes[1].end}`);
-        return;
-      }
+    // Verificar si el vehículo tiene restricciones en el día actual
+    if (!this.picoYPlacaService.isRestricted(lastDigit, currentDayOfWeek)) {
+      this.presentAlertModal('¡Puede circular con normalidad durante todo el día!');
+      return;
     }
   
-    this.presentAlertModal('¡Puede circular en esta fecha y hora!');
-  }
+    // Definir horarios restringidos
+    const restrictedTimes = [
+      { start: '06:00', end: '09:30' },
+      { start: '16:00', end: '21:00' },
+    ];
   
+    // Verificar si está dentro de los horarios restringidos
+    if (this.isTimeInRestrictedRange(this.time, restrictedTimes)) {
+      this.presentAlertModal(`No puede circular en los horarios restringidos: 
+        de ${restrictedTimes[0].start} a ${restrictedTimes[0].end}
+       y de ${restrictedTimes[1].start} a ${restrictedTimes[1].end}`);
+      return;
+    }
+  
+    // Si no está en horario restringido, mostrar mensaje con horarios posibles
+    this.presentAlertModal(`¡Puede circular en esta fecha y hora fuera de los horarios de resticción! 
+      Los horarios de restricción para su vehiculo son:
+      de ${restrictedTimes[0].start} a ${restrictedTimes[0].end} (Mañana)
+      y de ${restrictedTimes[1].start} a ${restrictedTimes[1].end} (Tarde)`);
+  }  
 
   private isTimeInRestrictedRange(time: string, restrictedTimes: { start: string, end: string }[]): boolean {
     const [hours, minutes] = time.split(':').map(Number);
